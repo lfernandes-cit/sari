@@ -12,4 +12,8 @@ public interface UsuarioService {
 
 	public List<UsuarioDTO> listar();
 
+	public UsuarioDTO consultarPorId(Long id);
+
+	public List<UsuarioDTO> consultarPorFiltro(String nome, String cpf);
+
 }

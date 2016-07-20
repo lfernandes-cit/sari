@@ -3,6 +3,9 @@ package br.com.sari.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel(value = "Histórico Médico", description = "Relação do histórico médico do usuário")
 public class HistoricoMedicoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 

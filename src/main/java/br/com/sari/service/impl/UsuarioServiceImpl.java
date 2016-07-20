@@ -20,14 +20,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	DozerBeanMapper mapper;
 
+	private final List<UsuarioDTO> usuariosDTO;
+
+	private List<Usuario> usuarios;
+
+	private final UsuarioDTO usuarioDTO;
+
+	private Usuario usuario;
+
+
 	public UsuarioServiceImpl() {
 		mapper = new DozerBeanMapper();
+		usuarioDTO = new UsuarioDTO();
+		usuariosDTO = new ArrayList<UsuarioDTO>();
+		usuario = new Usuario();
+
 	}
 
 	@Override
 	public void salvar(final UsuarioDTO usuarioDTO) {
 
-		final Usuario usuario = new Usuario();
 		mapper.map(usuarioDTO, usuario);
 
 		userRepo.save(usuario);
@@ -45,8 +57,23 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public List<UsuarioDTO> listar() {
 		final Iterable<Usuario> usuarios = userRepo.findAll();
 
-		final List<UsuarioDTO> usuariosDTO = new ArrayList<UsuarioDTO>();
 		mapper.map(usuarios, usuariosDTO);
+		return usuariosDTO;
+	}
+
+	@Override
+	public UsuarioDTO consultarPorId(final Long id) {
+		usuario = userRepo.findOne(id);
+		mapper.map(usuario, usuarioDTO);
+		return usuarioDTO;
+	}
+
+	@Override
+	public List<UsuarioDTO> consultarPorFiltro(final String nome, final String cpf) {
+
+		usuarios = userRepo.findByNomeLikeAndCpf(usuarioDTO.getNome(), usuario.getCpf());
+		mapper.map(usuarios, usuariosDTO);
+
 		return usuariosDTO;
 	}
 

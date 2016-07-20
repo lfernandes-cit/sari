@@ -3,6 +3,10 @@ package br.com.sari.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value = "Usuario", description = "Usuário do sistema")
 public class UsuarioDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -12,6 +16,7 @@ public class UsuarioDTO implements Serializable {
 
 	private String nome;
 
+	@ApiModelProperty(hidden = true)
 	private List<HistoricoMedicoDTO> historicoMedicos;
 
 	public UsuarioDTO() {

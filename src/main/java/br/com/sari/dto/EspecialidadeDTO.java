@@ -3,6 +3,9 @@ package br.com.sari.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel(value = "Especialidade", description = "Especialidade do médico")
 public class EspecialidadeDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
