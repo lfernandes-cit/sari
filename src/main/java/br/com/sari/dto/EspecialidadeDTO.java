@@ -25,6 +25,10 @@ public class EspecialidadeDTO implements Serializable {
 	public EspecialidadeDTO() {
 	}
 
+	public EspecialidadeDTO(final int id) {
+		this.id = id;
+	}
+
 	public int getId() {
 		return id;
 	}

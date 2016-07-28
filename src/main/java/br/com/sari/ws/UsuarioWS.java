@@ -180,11 +180,11 @@ public class UsuarioWS {
 			@ApiParam(value = "CPF do usuário", required = true, name = "cpf") @RequestParam(required = true) final String cpf) {
 
 		final RespostaPadraoDTO resposta = new RespostaPadraoDTO();
-		List<UsuarioDTO> usuarios;
+		UsuarioDTO usuario;
 		try {
-			usuarios = userService.consultarPorCpf(cpf);
+			usuario = userService.consultarPorCpf(cpf);
 			resposta.setMensagem(SUCESSO);
-			resposta.setObject(usuarios);
+			resposta.setObject(usuario);
 			resposta.setCodigo(OK);
 			return resposta;
 		} catch (final BusinessException e) {

@@ -15,7 +15,7 @@ public class UsuarioDTO implements Serializable {
 	private static final long serialVersionUID = 2277152019564353965L;
 
 	@ApiModelProperty(name = "idUsuario")
-	private String id;
+	private Long id;
 
 	private String cpf;
 
@@ -32,17 +32,23 @@ public class UsuarioDTO implements Serializable {
 	public UsuarioDTO() {
 	}
 
-	public UsuarioDTO(final String cpf, final String nome) {
+	public UsuarioDTO(final Long id) {
+		this.id = id;
+	}
+
+	public UsuarioDTO(final String cpf, final String nome, final String login, final String senha) {
 		super();
 		this.cpf = cpf;
 		this.nome = nome;
+		this.login = login;
+		this.senha = senha;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(final String id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 

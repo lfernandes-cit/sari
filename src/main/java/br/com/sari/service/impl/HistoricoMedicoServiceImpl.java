@@ -1,8 +1,11 @@
 package br.com.sari.service.impl;
 
+import static br.com.sari.util.CheckUtil.isNullOrEmpty;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +17,7 @@ import br.com.sari.exception.BusinessException;
 import br.com.sari.repository.HistoricoMedicoRepository;
 import br.com.sari.service.HistoricoMedicoService;
 import br.com.sari.util.BusinessExceptionMessages;
-import br.com.sari.util.CheckUtil;
+import br.com.sari.util.Entidades;
 import br.com.sari.util.Utils;
 
 @Service
@@ -29,13 +32,13 @@ public class HistoricoMedicoServiceImpl extends DozerAdapter implements Historic
 	}
 
 	@Override
-	public void salvar(HistoricoMedicoDTO historicoMedicoDTO) throws BusinessException {
+	public HistoricoMedicoDTO salvar(final HistoricoMedicoDTO historicoMedicoDTO) throws BusinessException {
 
 		try {
 			final HistoricoMedico historicoMedico = (HistoricoMedico) converter(historicoMedicoDTO, HistoricoMedico.class);
 			historicoMedico.setData(Utils.getDateTimeAtual());
 			historicoRepo.save(historicoMedico);
-			historicoMedicoDTO = (HistoricoMedicoDTO) converter(historicoMedico, HistoricoMedicoDTO.class);
+			return (HistoricoMedicoDTO) converter(historicoMedico, HistoricoMedicoDTO.class);
 		} catch (final Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
@@ -43,15 +46,20 @@ public class HistoricoMedicoServiceImpl extends DozerAdapter implements Historic
 	}
 
 	@Override
-	public void remover(final Long id) {
-		historicoRepo.delete(id);
+	public void remover(final Long id) throws BusinessException {
+		try {
+			historicoRepo.delete(id);
+		} catch (final EmptyResultDataAccessException e) {
+			BusinessExceptionMessages.entidadeNaoEncontrada(Entidades.HISTORICO_MEDICO.getNome(), "Id", id.toString());
+		}
+
 	}
 
 	@Override
 	public List<HistoricoMedicoDTO> listarPorUsuario(final Long idUsuario) throws BusinessException {
 		final List<HistoricoMedico> historicoMedicos = historicoRepo.findByUsuarioId(idUsuario);
 
-		if (CheckUtil.IsNullOrEmpty(historicoMedicos)) {
+		if (isNullOrEmpty(historicoMedicos)) {
 			BusinessExceptionMessages.historicoMedicoNaoEncontrado();
 		}
 

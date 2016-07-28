@@ -15,7 +15,7 @@ public class HistoricoMedicoDTO implements Serializable {
 	private static final long serialVersionUID = -112768916177795216L;
 
 	@ApiModelProperty(name = "idHistoricoMedico")
-	private String id;
+	private Long id;
 
 	private Date data;
 
@@ -28,11 +28,17 @@ public class HistoricoMedicoDTO implements Serializable {
 	public HistoricoMedicoDTO() {
 	}
 
-	public String getId() {
+	public HistoricoMedicoDTO(final String descricao, final UsuarioDTO usuarioDTO, final EspecialidadeDTO especialidadeDTO) {
+		this.descricao = descricao;
+		especialidade = especialidadeDTO;
+		usuario = usuarioDTO;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(final String id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 

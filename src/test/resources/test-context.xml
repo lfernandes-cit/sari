@@ -26,7 +26,7 @@
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="datasource" />
 		<property name="persistenceUnitName" value="sariPU-test" />
-		<property name="persistenceXmlLocation" value="/test-persistence.xml" />
+		<property name="persistenceXmlLocation" value="classpath*:test-persistence.xml" />
 	</bean>
 	
 	<!-- Transaction Manager -->

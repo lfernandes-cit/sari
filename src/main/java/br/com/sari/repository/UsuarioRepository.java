@@ -12,7 +12,7 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
 	public List<Usuario> findByNomeContaining(String nome);
 
-	public List<Usuario> findByCpf(String cpf);
+	public Usuario findByCpf(String cpf);
 
 	public Usuario findByLoginAndSenha(String login, String senha);
 

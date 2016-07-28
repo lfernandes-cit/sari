@@ -1,10 +1,15 @@
 package br.com.sari.service.impl;
 
+import static br.com.sari.util.CheckUtil.isNull;
+import static br.com.sari.util.CheckUtil.isNullOrEmpty;
+
 import java.util.List;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.dozer.DozerBeanMapper;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +22,7 @@ import br.com.sari.repository.UsuarioRepository;
 import br.com.sari.service.UsuarioService;
 import br.com.sari.util.AESencrp;
 import br.com.sari.util.BusinessExceptionMessages;
-import br.com.sari.util.CheckUtil;
+import br.com.sari.util.Entidades;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
@@ -34,15 +39,13 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 	}
 
 	@Override
-	public void salvar(UsuarioDTO usuarioDTO) throws BusinessException {
+	public UsuarioDTO salvar(final UsuarioDTO usuarioDTO) throws BusinessException {
 
 		try {
 			final Usuario usuario = (Usuario) converter(usuarioDTO, Usuario.class);
-
-
 			usuario.setSenha(AESencrp.encrypt(usuario.getSenha()));
 			userRepo.save(usuario);
-			usuarioDTO = (UsuarioDTO) converter(usuario, UsuarioDTO.class);
+			return (UsuarioDTO) converter(usuario, UsuarioDTO.class);
 		} catch (final Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
@@ -50,8 +53,15 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 	}
 
 	@Override
-	public void remover(final Long id) {
-		userRepo.delete(id);
+	public void remover(final Long id) throws BusinessException {
+		try {
+			userRepo.delete(id);
+		} catch (final EmptyResultDataAccessException e) {
+			BusinessExceptionMessages.entidadeNaoEncontrada(Entidades.USUARIO.getNome(), "Id", id.toString());
+		} catch (final ConstraintViolationException e) {
+			BusinessExceptionMessages.entidadeComRelacionamentos(Entidades.USUARIO.getNome(), "Id", id.toString());
+		}
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,7 +69,7 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 	public List<UsuarioDTO> listar() throws BusinessException {
 		final List<Usuario> usuarios = IteratorUtils.toList(userRepo.findAll().iterator());
 
-		if (CheckUtil.IsNullOrEmpty(usuarios)) {
+		if (isNullOrEmpty(usuarios)) {
 			BusinessExceptionMessages.usuarioNaoEncontrado();
 		}
 
@@ -72,8 +82,8 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 	public UsuarioDTO consultarPorId(final Long id) throws BusinessException {
 		final Usuario usuario = userRepo.findOne(id);
 
-		if (CheckUtil.IsNull(usuario)) {
-			BusinessExceptionMessages.usuarioNaoEncontrado("Id", id.toString());
+		if (isNull(usuario)) {
+			BusinessExceptionMessages.entidadeNaoEncontrada(Entidades.USUARIO.getNome(), "Id", id.toString());
 		}
 
 		final UsuarioDTO usuarioDTO = (UsuarioDTO) converter(usuario, UsuarioDTO.class);
@@ -86,8 +96,8 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 
 		final List<Usuario> usuarios = userRepo.findByNomeContaining(nome);
 
-		if (CheckUtil.IsNullOrEmpty(usuarios)) {
-			BusinessExceptionMessages.usuarioNaoEncontrado("Nome", nome);
+		if (isNullOrEmpty(usuarios)) {
+			BusinessExceptionMessages.entidadeNaoEncontrada(Entidades.USUARIO.getNome(), "Nome", nome);
 		}
 
 		final List<UsuarioDTO> usuariosDTO = converterLista(usuarios, UsuarioDTO.class);
@@ -96,25 +106,26 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 	}
 
 	@Override
-	public List<UsuarioDTO> consultarPorCpf(final String cpf) throws BusinessException {
+	public UsuarioDTO consultarPorCpf(final String cpf) throws BusinessException {
 
-		final List<Usuario> usuarios = userRepo.findByCpf(cpf);
+		final Usuario usuario = userRepo.findByCpf(cpf);
 
-		if (CheckUtil.IsNullOrEmpty(usuarios)) {
-			BusinessExceptionMessages.usuarioNaoEncontrado("CPF", cpf);
+		if (isNull(usuario)) {
+			BusinessExceptionMessages.entidadeNaoEncontrada(Entidades.USUARIO.getNome(), "CPF", cpf);
 		}
 
-		final List<UsuarioDTO> usuariosDTO = converterLista(usuarios, UsuarioDTO.class);
+		final UsuarioDTO usuarioDTO = (UsuarioDTO) converter(usuario, UsuarioDTO.class);
 
-		return usuariosDTO;
+		return usuarioDTO;
 	}
 
 	@Override
 	public UsuarioDTO login(final String login, final String senha) throws Exception {
+
 		final Usuario usuario = userRepo.findByLoginAndSenha(login, AESencrp.encrypt(senha));
 
-		if (CheckUtil.IsNull(usuario)) {
-			BusinessExceptionMessages.usuarioNaoEncontrado("Login", login);
+		if (isNull(usuario)) {
+			BusinessExceptionMessages.entidadeNaoEncontrada(Entidades.USUARIO.getNome(), "Login", login);
 		}
 
 		final UsuarioDTO usuarioDTO = (UsuarioDTO) converter(usuario, UsuarioDTO.class);

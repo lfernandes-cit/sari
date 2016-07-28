@@ -1,8 +1,8 @@
-﻿package br.com.sari.util;
+package br.com.sari.util;
 
 public enum Entidades {
 
-	//Sistema
+	// Sistema
 	USUARIO                 ("Usuário"),
 	HISTORICO_MEDICO		("Histórico Médico");
 
@@ -19,4 +19,5 @@ public enum Entidades {
 	public void setNome(final String nome) {
 		this.nome = nome;
 	}
+
 }

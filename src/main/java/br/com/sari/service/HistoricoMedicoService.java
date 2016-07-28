@@ -7,7 +7,7 @@ import br.com.sari.exception.BusinessException;
 
 public interface HistoricoMedicoService {
 
-	public void salvar(HistoricoMedicoDTO historicoMedico) throws BusinessException;
+	public HistoricoMedicoDTO salvar(HistoricoMedicoDTO historicoMedico) throws BusinessException;
 
 	public void remover(Long id) throws BusinessException;
 
