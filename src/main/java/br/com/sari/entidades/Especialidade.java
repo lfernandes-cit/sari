@@ -31,8 +31,8 @@ public class Especialidade implements Serializable {
 	@Column(name="NOME")
 	private String nome;
 
-	//bi-directional many-to-one association to HistoricoMedico
-	@OneToMany(mappedBy="especialidade")
+	// bi-directional many-to-one association to HistoricoMedico
+	@OneToMany(mappedBy = "especialidade")
 	private List<HistoricoMedico> historicoMedicos;
 
 	public Especialidade() {

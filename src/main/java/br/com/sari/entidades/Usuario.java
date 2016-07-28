@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,8 +34,14 @@ public class Usuario implements Serializable {
 	@Column(name="NOME")
 	private String nome;
 
+	@Column(name = "LOGIN")
+	private String login;
+
+	@Column(name = "SENHA")
+	private String senha;
+
 	//bi-directional many-to-one association to HistoricoMedico
-	@OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "usuario")
 	private List<HistoricoMedico> historicoMedicos;
 
 	public Usuario() {
@@ -93,6 +98,22 @@ public class Usuario implements Serializable {
 		historicoMedico.setUsuario(null);
 
 		return historicoMedico;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(final String login) {
+		this.login = login;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(final String senha) {
+		this.senha = senha;
 	}
 
 }

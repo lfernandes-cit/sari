@@ -3,16 +3,23 @@ package br.com.sari.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "Especialidade", description = "Especialidade do médico")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class EspecialidadeDTO implements Serializable {
-	private static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 4733912119567777113L;
+
+	@ApiModelProperty(name = "idEspecialidade")
 	private int id;
 
 	private String nome;
 
+	@ApiModelProperty(hidden = true)
 	private List<HistoricoMedicoDTO> historicoMedicos;
 
 	public EspecialidadeDTO() {

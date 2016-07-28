@@ -7,6 +7,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" 
 	xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:tx="http://www.springframework.org/schema/tx"	
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc 
 	http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
         http://www.springframework.org/schema/context 
@@ -15,6 +16,8 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/data/jpa 
 		http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://camel.apache.org/schema/spring 
 		http://camel.apache.org/schema/spring/camel-spring.xsd
 		 http://www.springframework.org/schema/mvc
@@ -22,14 +25,13 @@
 		http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
 
 	<mvc:annotation-driven />
+	
 	<mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
 	<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
 	<context:annotation-config />
 	
 	<!-- Setting up component scan -->
     <context:component-scan base-package="br.com.sari"/>
-    
-    
 
 	<!-- Entity Manager -->
 	<bean id="entityManagerFactory"
@@ -42,6 +44,8 @@
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
+	
+	<!--  <tx:annotation-driven transaction-manager="transactionManager" />-->
 
 	<!-- Jpa Repositories -->
 	<jpa:repositories base-package="br.com.sari.repository"></jpa:repositories>

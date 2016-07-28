@@ -3,17 +3,22 @@ package br.com.sari.service;
 import java.util.List;
 
 import br.com.sari.dto.UsuarioDTO;
+import br.com.sari.exception.BusinessException;
 
 public interface UsuarioService {
 
-	public void salvar(UsuarioDTO usuario);
+	public void salvar(UsuarioDTO usuario) throws BusinessException;
 
-	public void remover(Long id);
+	public void remover(Long id) throws BusinessException;
 
-	public List<UsuarioDTO> listar();
+	public List<UsuarioDTO> listar() throws BusinessException;
 
-	public UsuarioDTO consultarPorId(Long id);
+	public UsuarioDTO consultarPorId(Long id) throws BusinessException;
 
-	public List<UsuarioDTO> consultarPorFiltro(String nome, String cpf);
+	public List<UsuarioDTO> consultarPorNome(String nome) throws BusinessException;
+
+	public List<UsuarioDTO> consultarPorCpf(String cpf) throws BusinessException;
+
+	public UsuarioDTO login(String login, String senha) throws BusinessException, Exception;
 
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,18 +32,21 @@ public class HistoricoMedico implements Serializable {
 	@Column(name="ID")
 	private Long id;
 
+	@Column(name = "DATA")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="DATA")
 	private Date data;
 
+	@Column(name = "DESCRICAO")
+	private String descricao;
+
 	//bi-directional many-to-one association to Especialidade
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="COD_ESPECIALIDADE")
 	private Especialidade especialidade;
 
-	//bi-directional many-to-one association to Usuario
-	@ManyToOne
-	@JoinColumn(name="COD_USUARIO")
+	// bi-directional many-to-one association to Usuario
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "COD_USUARIO")
 	private Usuario usuario;
 
 	public HistoricoMedico() {
@@ -78,6 +82,14 @@ public class HistoricoMedico implements Serializable {
 
 	public void setUsuario(final Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(final String descricao) {
+		this.descricao = descricao;
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.sari.dto.UsuarioDTO;
+import br.com.sari.exception.BusinessException;
 import br.com.sari.service.UsuarioService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -18,7 +19,7 @@ public class UsuarioTest {
 	UsuarioService usuarioService;
 
 	@Test
-	public void cadastra() {
+	public void cadastra() throws BusinessException {
 		final UsuarioDTO usuarioDTO = new UsuarioDTO("65897458588", "Luiz Gabriel");
 		usuarioService.salvar(usuarioDTO);
 

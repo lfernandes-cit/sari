@@ -1,50 +1,51 @@
 package br.com.sari.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import br.com.sari.adapter.DozerAdapter;
 import br.com.sari.dto.UsuarioDTO;
 import br.com.sari.entidades.Usuario;
+import br.com.sari.exception.BusinessException;
 import br.com.sari.repository.UsuarioRepository;
 import br.com.sari.service.UsuarioService;
+import br.com.sari.util.AESencrp;
+import br.com.sari.util.BusinessExceptionMessages;
+import br.com.sari.util.CheckUtil;
 
 @Service
-public class UsuarioServiceImpl implements UsuarioService {
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
+public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 
 	@Autowired
 	UsuarioRepository userRepo;
 
 	DozerBeanMapper mapper;
 
-	private final List<UsuarioDTO> usuariosDTO;
-
-	private List<Usuario> usuarios;
-
-	private final UsuarioDTO usuarioDTO;
-
-	private Usuario usuario;
-
 
 	public UsuarioServiceImpl() {
-		mapper = new DozerBeanMapper();
-		usuarioDTO = new UsuarioDTO();
-		usuariosDTO = new ArrayList<UsuarioDTO>();
-		usuario = new Usuario();
-
+		super();
 	}
 
 	@Override
-	public void salvar(final UsuarioDTO usuarioDTO) {
+	public void salvar(UsuarioDTO usuarioDTO) throws BusinessException {
 
-		mapper.map(usuarioDTO, usuario);
+		try {
+			final Usuario usuario = (Usuario) converter(usuarioDTO, Usuario.class);
 
-		userRepo.save(usuario);
 
-		mapper.map(usuario, usuarioDTO);
+			usuario.setSenha(AESencrp.encrypt(usuario.getSenha()));
+			userRepo.save(usuario);
+			usuarioDTO = (UsuarioDTO) converter(usuario, UsuarioDTO.class);
+		} catch (final Exception e) {
+			throw new BusinessException(e.getMessage());
+		}
 
 	}
 
@@ -53,28 +54,72 @@ public class UsuarioServiceImpl implements UsuarioService {
 		userRepo.delete(id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<UsuarioDTO> listar() {
-		final Iterable<Usuario> usuarios = userRepo.findAll();
+	public List<UsuarioDTO> listar() throws BusinessException {
+		final List<Usuario> usuarios = IteratorUtils.toList(userRepo.findAll().iterator());
 
-		mapper.map(usuarios, usuariosDTO);
+		if (CheckUtil.IsNullOrEmpty(usuarios)) {
+			BusinessExceptionMessages.usuarioNaoEncontrado();
+		}
+
+		final List<UsuarioDTO> usuariosDTO = converterLista(usuarios, UsuarioDTO.class);
+
 		return usuariosDTO;
 	}
 
 	@Override
-	public UsuarioDTO consultarPorId(final Long id) {
-		usuario = userRepo.findOne(id);
-		mapper.map(usuario, usuarioDTO);
+	public UsuarioDTO consultarPorId(final Long id) throws BusinessException {
+		final Usuario usuario = userRepo.findOne(id);
+
+		if (CheckUtil.IsNull(usuario)) {
+			BusinessExceptionMessages.usuarioNaoEncontrado("Id", id.toString());
+		}
+
+		final UsuarioDTO usuarioDTO = (UsuarioDTO) converter(usuario, UsuarioDTO.class);
+
 		return usuarioDTO;
 	}
 
 	@Override
-	public List<UsuarioDTO> consultarPorFiltro(final String nome, final String cpf) {
+	public List<UsuarioDTO> consultarPorNome(final String nome) throws BusinessException {
 
-		usuarios = userRepo.findByNomeLikeAndCpf(usuarioDTO.getNome(), usuario.getCpf());
-		mapper.map(usuarios, usuariosDTO);
+		final List<Usuario> usuarios = userRepo.findByNomeContaining(nome);
+
+		if (CheckUtil.IsNullOrEmpty(usuarios)) {
+			BusinessExceptionMessages.usuarioNaoEncontrado("Nome", nome);
+		}
+
+		final List<UsuarioDTO> usuariosDTO = converterLista(usuarios, UsuarioDTO.class);
 
 		return usuariosDTO;
+	}
+
+	@Override
+	public List<UsuarioDTO> consultarPorCpf(final String cpf) throws BusinessException {
+
+		final List<Usuario> usuarios = userRepo.findByCpf(cpf);
+
+		if (CheckUtil.IsNullOrEmpty(usuarios)) {
+			BusinessExceptionMessages.usuarioNaoEncontrado("CPF", cpf);
+		}
+
+		final List<UsuarioDTO> usuariosDTO = converterLista(usuarios, UsuarioDTO.class);
+
+		return usuariosDTO;
+	}
+
+	@Override
+	public UsuarioDTO login(final String login, final String senha) throws Exception {
+		final Usuario usuario = userRepo.findByLoginAndSenha(login, AESencrp.encrypt(senha));
+
+		if (CheckUtil.IsNull(usuario)) {
+			BusinessExceptionMessages.usuarioNaoEncontrado("Login", login);
+		}
+
+		final UsuarioDTO usuarioDTO = (UsuarioDTO) converter(usuario, UsuarioDTO.class);
+
+		return usuarioDTO;
 	}
 
 }
