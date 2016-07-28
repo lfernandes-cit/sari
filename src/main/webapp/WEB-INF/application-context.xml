@@ -45,6 +45,12 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
+	 
+	 
+	 <bean class="java.net.URI" id="dbUrl">
+    	<constructor-arg value="postgres://gpnbsdchfrhxwm:-e8tl4-kZkGv8rJGIwhCgBa7wS@ec2-54-243-42-108.compute-1.amazonaws.com:5432/d71q2he280qsbn"/>
+	</bean>
+	
 	<!--  <tx:annotation-driven transaction-manager="transactionManager" />-->
 
 	<!-- Jpa Repositories -->
