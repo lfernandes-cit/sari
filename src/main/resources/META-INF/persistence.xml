@@ -11,12 +11,12 @@
 
 
 		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
 			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/mydb" />
-			<property name="hibernate.connection.username" value="root" />
-			<property name="hibernate.connection.password" value="root" />
+			<property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
+			<property name="hibernate.connection.url" value="jdbc:mysql://ec2-54-243-42-108.compute-1.amazonaws.com:5432/mydb" />
+			<property name="hibernate.connection.username" value="gpnbsdchfrhxwm" />
+			<property name="hibernate.connection.password" value="-e8tl4-kZkGv8rJGIwhCgBa7wS" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.enable_lazy_load_no_trans" value="true" />
 			
