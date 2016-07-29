@@ -229,8 +229,16 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-
-
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                    <warName>sari</warName>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -257,6 +265,7 @@
 
 
 		</plugins>
+		<finalName>sari</finalName>
 	</build>
 
 
