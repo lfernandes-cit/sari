@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import br.com.sari.dto.RespostaPadraoDTO;
 import br.com.sari.dto.UsuarioDTO;
@@ -22,7 +21,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @RestController
-@EnableWebMvc
 @Api(value = "/usuario", description = "Operações sobre o Usuário")
 @RequestMapping(value = "/usuario")
 public class UsuarioWS {
@@ -80,7 +78,7 @@ public class UsuarioWS {
 	}
 
 	@ApiOperation(value = "Listar", notes = "Lista todos os usuários")
-	@RequestMapping(value = "/listar", method = RequestMethod.GET)
+	@RequestMapping(value = "/listar**", method = RequestMethod.GET)
 	public @ResponseBody RespostaPadraoDTO listar() {
 
 		final RespostaPadraoDTO resposta = new RespostaPadraoDTO();

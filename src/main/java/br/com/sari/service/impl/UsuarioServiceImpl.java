@@ -10,6 +10,7 @@ import org.dozer.DozerBeanMapper;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import br.com.sari.util.BusinessExceptionMessages;
 import br.com.sari.util.Entidades;
 
 @Service
+@Component
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
 public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 

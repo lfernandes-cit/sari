@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import br.com.sari.dto.HistoricoMedicoDTO;
 import br.com.sari.dto.RespostaPadraoDTO;
@@ -21,7 +20,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @RestController
-@EnableWebMvc
 @Api(value = "/historicoMedico", description = "Operações sobre o Histórico Médico do usuário")
 @RequestMapping(value = "/historicoMedico")
 public class HistoricoMedicoWS {
