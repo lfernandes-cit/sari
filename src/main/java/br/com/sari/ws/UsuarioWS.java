@@ -78,7 +78,7 @@ public class UsuarioWS {
 	}
 
 	@ApiOperation(value = "Listar", notes = "Lista todos os usuários")
-	@RequestMapping(value = "/listar**", method = RequestMethod.GET)
+	@RequestMapping(value = "/listar", method = RequestMethod.GET)
 	public @ResponseBody RespostaPadraoDTO listar() {
 
 		final RespostaPadraoDTO resposta = new RespostaPadraoDTO();

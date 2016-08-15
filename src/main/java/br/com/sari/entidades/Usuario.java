@@ -39,7 +39,7 @@ public class Usuario implements Serializable {
 	private String login;
 
 	@Column(name = "SENHA")
-	private String senha;
+	private String senhaEncriptada;
 
 	//bi-directional many-to-one association to HistoricoMedico
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
@@ -109,12 +109,12 @@ public class Usuario implements Serializable {
 		this.login = login;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getSenhaEncriptada() {
+		return senhaEncriptada;
 	}
 
-	public void setSenha(final String senha) {
-		this.senha = senha;
+	public void setSenhaEncriptada(final String senhaEncriptada) {
+		this.senhaEncriptada = senhaEncriptada;
 	}
 
 }

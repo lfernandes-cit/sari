@@ -69,6 +69,11 @@ public class PersistenceJPAConfig {
 		properties.setProperty("hibernate.enable_lazy_load_no_trans", "true");
 		properties.setProperty("hibernate.show_sql", "true");
 		properties.setProperty("hibernate.default_schema", "sari");
+		properties.setProperty("hibernate.c3p0.min_size", "5");
+		properties.setProperty("hibernate.c3p0.max_size", "20");
+		properties.setProperty("hibernate.c3p0.timeout", "300");
+		properties.setProperty("hibernate.c3p0.max_statements", "50");
+		properties.setProperty("hibernate.c3p0.idle_test_period", "3000");
 
 		return properties;
 	}

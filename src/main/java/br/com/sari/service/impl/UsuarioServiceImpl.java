@@ -10,9 +10,7 @@ import org.dozer.DozerBeanMapper;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.sari.adapter.DozerAdapter;
@@ -26,8 +24,6 @@ import br.com.sari.util.BusinessExceptionMessages;
 import br.com.sari.util.Entidades;
 
 @Service
-@Component
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
 public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 
 	@Autowired
@@ -41,11 +37,12 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = BusinessException.class)
 	public UsuarioDTO salvar(final UsuarioDTO usuarioDTO) throws BusinessException {
 
 		try {
 			final Usuario usuario = (Usuario) converter(usuarioDTO, Usuario.class);
-			usuario.setSenha(AESencrp.encrypt(usuario.getSenha()));
+			usuario.setSenhaEncriptada(AESencrp.encrypt(usuario.getSenhaEncriptada()));
 			userRepo.save(usuario);
 			return (UsuarioDTO) converter(usuario, UsuarioDTO.class);
 		} catch (final Exception e) {
@@ -55,6 +52,7 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = BusinessException.class)
 	public void remover(final Long id) throws BusinessException {
 		try {
 			userRepo.delete(id);
@@ -79,6 +77,8 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 
 		return usuariosDTO;
 	}
+
+
 
 	@Override
 	public UsuarioDTO consultarPorId(final Long id) throws BusinessException {
@@ -124,7 +124,7 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 	@Override
 	public UsuarioDTO login(final String login, final String senha) throws Exception {
 
-		final Usuario usuario = userRepo.findByLoginAndSenha(login, AESencrp.encrypt(senha));
+		final Usuario usuario = userRepo.findByLoginAndSenhaEncriptada(login, AESencrp.encrypt(senha));
 
 		if (isNull(usuario)) {
 			BusinessExceptionMessages.entidadeNaoEncontrada(Entidades.USUARIO.getNome(), "Login", login);
@@ -134,5 +134,6 @@ public class UsuarioServiceImpl extends DozerAdapter implements UsuarioService {
 
 		return usuarioDTO;
 	}
+
 
 }

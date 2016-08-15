@@ -23,7 +23,7 @@ public class UsuarioDTO implements Serializable {
 
 	private String login;
 
-	private String senha;
+	private String senhaEncriptada;
 
 	@ApiModelProperty(hidden = true)
 	private List<HistoricoMedicoDTO> historicoMedicos;
@@ -36,12 +36,12 @@ public class UsuarioDTO implements Serializable {
 		this.id = id;
 	}
 
-	public UsuarioDTO(final String cpf, final String nome, final String login, final String senha) {
+	public UsuarioDTO(final String cpf, final String nome, final String login, final String senhaEncriptada) {
 		super();
 		this.cpf = cpf;
 		this.nome = nome;
 		this.login = login;
-		this.senha = senha;
+		this.senhaEncriptada = senhaEncriptada;
 	}
 
 	public Long getId() {
@@ -98,12 +98,12 @@ public class UsuarioDTO implements Serializable {
 		this.login = login;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getSenhaEncriptada() {
+		return senhaEncriptada;
 	}
 
-	public void setSenha(final String senha) {
-		this.senha = senha;
+	public void setSenhaEncriptada(final String senhaEncriptada) {
+		this.senhaEncriptada = senhaEncriptada;
 	}
 
 }

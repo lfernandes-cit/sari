@@ -2,8 +2,6 @@ package br.com.sari.util;
 
 import br.com.sari.exception.BusinessException;
 
-
-
 public class BusinessExceptionMessages {
 
 	private static final String SEPARADOR = ": ";

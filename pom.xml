@@ -42,6 +42,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- Hibernate c3p0 connection pool -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>5.0.0.Final</version>
+		</dependency>
 
 
 
@@ -210,7 +216,7 @@
 			<version>${spring.security.version}</version>
 		</dependency>
 
-		<!-- Swagger Ends -->
+		
 
 
 	</dependencies>
